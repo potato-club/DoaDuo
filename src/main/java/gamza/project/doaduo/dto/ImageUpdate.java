@@ -1,13 +1,11 @@
 package gamza.project.doaduo.dto;
 
+import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
-public class Image {
-
-  private final Long id;
+public class ImageUpdate {
 
   private final String originalFileName;
 
@@ -17,13 +15,11 @@ public class Image {
 
   private final String userEmail;
 
-
-  public Image(Long id, String originalFileName, String fileName, String fileUrl, String email) {
-    this.id = id;
-    this.originalFileName = originalFileName;
+  @Builder
+  public ImageUpdate(String key, String fileName, String fileUrl, String userEmail) {
+    this.originalFileName = key;
     this.fileName = fileName;
     this.fileUrl = fileUrl;
-    this.userEmail = email;
+    this.userEmail = userEmail;
   }
-
 }

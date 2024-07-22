@@ -1,9 +1,14 @@
 package gamza.project.doaduo.Service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import gamza.project.doaduo.Repository.ImageRepository;
+import gamza.project.doaduo.dto.Image;
+import gamza.project.doaduo.dto.ImageRequest;
+import gamza.project.doaduo.dto.ImageUpdate;
 import gamza.project.doaduo.entity.ImageEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,8 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ImageServiceImpl implements ImageService {
@@ -28,53 +33,82 @@ public class ImageServiceImpl implements ImageService {
     this.bucketName = bucketName;
   }
 
-  public void uploadFile(MultipartFile image, String userEmail) {
-    String originalFileName = image.getOriginalFilename();
-    String fileName = changeFileName(originalFileName);
+  @Override
+  public void uploadFile(MultipartFile image, ImageRequest imageRequest) throws IOException {
+    String key = image.getOriginalFilename();
+    String fileName = UUID.randomUUID() + "-" + key;
 
-    try {
-      ObjectMetadata metadata = new ObjectMetadata();
-      metadata.setContentLength(image.getSize());
-      metadata.setContentType(image.getContentType());
-      metadata.setSSEAlgorithm(ObjectMetadata.AES_256_SERVER_SIDE_ENCRYPTION); // 서버 측 암호화 설정
-      metadata.addUserMetadata("uploaded-by",userEmail);
-
-      PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, fileName, image.getInputStream(), metadata);
-      amazonS3Client.putObject(putObjectRequest);
-    } catch (IOException e) {
-      e.printStackTrace();
-      throw new RuntimeException("파일 업로드 실패");
+    if(amazonS3Client.doesObjectExist(bucketName, key)){
+        throw new RuntimeException("이미 존재하는 이미지입니다.");
     }
 
-    String fileUrl = amazonS3Client.getUrl(bucketName, fileName).toString();
+    ObjectMetadata metadata = new ObjectMetadata();
+    metadata.setContentLength(image.getSize());
+    amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, image.getInputStream(), metadata));
 
     // ImageEntity 객체를 생성합니다.
     ImageEntity imageEntity = ImageEntity.builder()
+        .originalFileName(key)
         .fileName(fileName)
-        .fileUrl(fileUrl)
-        .email(userEmail) // 사용자 이메일도 저장할 수 있음
+        .fileUrl(amazonS3Client.getUrl(bucketName, fileName).toString())
+        .userEmail(imageRequest.getUser_email()) // 사용자 이메일도 저장할 수 있음
         .build();
 
     imageRepository.save(imageEntity);
   }
 
+  @Override
+  public void updateFile(MultipartFile image, ImageUpdate update) throws IOException {
+    if (image.isEmpty()) {
+      throw new RuntimeException("변경할 이미지가 없습니다.");
+    }
+    Image imagedto  = imageRepository.findByUserEmail(update.getUserEmail());
 
-  public void deleteFile(Long imageId) {
-    // 데이터베이스에서 이미지 엔티티를 조회합니다.
-    ImageEntity imageEntity = imageRepository.findById(imageId)
-        .orElseThrow(() -> new RuntimeException("이미지를 찾을 수 없습니다."));
+    if (imagedto==null) {
+      throw new RuntimeException("해당 사용자 이메일로 등록된 프로필 이미지가 없습니다.");
+    }
 
+    // S3에서 기존 파일을 삭제합니다.
+    amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, update.getFileName()));
+
+    // 새로운 파일을 S3에 업로드합니다.
+    String key = image.getOriginalFilename();
+    String fileName = UUID.randomUUID() + "-" + key;
+
+    ObjectMetadata metadata = new ObjectMetadata();
+    metadata.setContentLength(image.getSize());
+    amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, image.getInputStream(), metadata));
+
+    // 기존 이미지 엔티티를 업데이트합니다.
+    ImageEntity updatedImageEntity = ImageEntity.builder()
+        .id(imagedto.getId())
+        .originalFileName(key)
+        .fileName(fileName)
+        .fileUrl(amazonS3Client.getUrl(bucketName, fileName).toString())
+        .userEmail(imagedto.getUserEmail())
+        .build();
+    imageRepository.save(updatedImageEntity);
+  }
+
+  @Override
+  public void deleteFile(ImageRequest request) throws IOException {
+    Image imagedto = imageRepository.findByUserEmail(request.getUser_email());
+
+    if (imagedto==null) {
+      throw new RuntimeException("해당 사용자 이메일로 등록된 프로필 이미지가 없습니다.");
+    }
     // S3에서 파일을 삭제합니다.
-    amazonS3Client.deleteObject(bucketName, imageEntity.getFileName());
+    amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, imagedto.getFileName()));
+
 
     // 데이터베이스에서 이미지 엔티티를 삭제합니다.
-    imageRepository.delete(imageEntity);
+    imageRepository.delete(ImageEntity.from(imagedto));
   }
 
-  private String changeFileName(String originalFileName) {
-    /* 업로드할 파일의 이름을 변경하는 로직 */
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-    return originalFileName + "_" + LocalDateTime.now().format(formatter);
+  @Override
+  public void viewFile(ImageRequest request) throws IOException {
+
   }
+
 
 }
