@@ -30,13 +30,10 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-    @Column(nullable = false)
     private String phoneNumber;
 
-    @Column(nullable = false)
     private boolean gender; // true = maie
 
-    @Column(nullable = false)
     private String address;
 
     private String memo;

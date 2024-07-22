@@ -20,10 +20,10 @@ public class RequestUserSignUpDto {
     private String password;
     private String username;
     private UserRole userRole;
-    private String phoneNumber;
-    private boolean gender; // true = maie
-    private String address;
-    private String memo;
+//    private String phoneNumber;
+//    private boolean gender; // true = maie
+//    private String address;
+//    private String memo;
 
 
     @Builder
@@ -33,10 +33,10 @@ public class RequestUserSignUpDto {
                 .password(password)
                 .username(username)
                 .userRole(userRole)
-                .phoneNumber(phoneNumber)
-                .gender(gender)
-                .address(address)
-                .memo(memo)
+//                .phoneNumber(phoneNumber)
+//                .gender(gender)
+//                .address(address)
+//                .memo(memo)
                 .build();
     }
 
