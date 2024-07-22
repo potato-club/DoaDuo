@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import gamza.project.doaduo.entity.UserEntity;
 import gamza.project.doaduo.entity.UserRole;
+import gamza.project.doaduo.repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
