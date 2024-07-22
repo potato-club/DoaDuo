@@ -1,4 +1,4 @@
-package gamza.project.doaduo.config;
+package gamza.project.doaduo.Config;
 
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;

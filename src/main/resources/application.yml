@@ -23,3 +23,20 @@ jwt:
   refreshExpiration: 604800000 # 60000 #
   aesKey: cec7a2ba03cd4112
 
+jasypt:
+  encryptor:
+    password: jasyptStringEncryptor
+
+  # 밑에다가 s3 적기
+cloud:
+  aws:
+    s3:
+      bucket: ENC(LuVjS3Hwp6gWBpMGEVm/FYyqskQghdWeAD16EW12ub4=)
+    region:
+      auto: false
+      static: ap-northeast-2
+    credentials:
+      accessKey: ENC(2+uvcOtFKYiPgx3y+xyoDlHYn4UGmNkM/VB9ssZdDHE=)
+      secretKey: ENC(UJ6ALvoHpJZvP5T8gmnkZYIWpKms59u7U/X5pFLH8UnQ0yWFKs0LJ2tim3X44uXlys3ovYBDVOA=)
+    stack:
+      auto: false

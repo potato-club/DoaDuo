@@ -1,4 +1,4 @@
-package gamza.project.doaduo.service.inter;
+package gamza.project.doaduo.Service.inter;
 
 import gamza.project.doaduo.dto.RequestUserLoginDto;
 import gamza.project.doaduo.dto.RequestUserSignUpDto;

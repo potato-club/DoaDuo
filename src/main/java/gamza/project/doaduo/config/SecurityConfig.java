@@ -1,4 +1,4 @@
-package gamza.project.doaduo.config;
+package gamza.project.doaduo.Config;
 
 import gamza.project.doaduo.jwt.JwtAuthorizationTokenFilter;
 import gamza.project.doaduo.jwt.JwtTokenProvider;
