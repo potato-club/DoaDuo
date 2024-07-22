@@ -1,35 +1,22 @@
-#FROM openjdk:17-jdk AS build
-#WORKDIR /app
-#COPY . /app
-#RUN chmod +x ./gradlew
-#
-#RUN microdnf install -y findutils
-#RUN ./gradlew bootJar
-#
-#ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -jar /app/build/libs/doaduo-0.0.1-SNAPSHOT.jar"]
-#
-FROM openjdk:17-jdk
+# First stage: build the application
+FROM openjdk:17-jdk AS build
 
-# Set working directory
 WORKDIR /app
 
-# Copy the application files
+# Copy the project files to the build container
 COPY . /app
 
-# Ensure gradlew is executable
-#RUN chmod +x ./gradlew
+# Run the build process (adjust the build command as needed, e.g., using Gradle or Maven)
+# For example, using Gradle:
+RUN ./gradlew build
 
-# Install findutils and build the application
-#RUN microdnf install -y findutils && microdnf clean all && ./gradlew bootJar
+# Second stage: create the runtime image
+FROM openjdk:17-jdk
 
-# Second stage: create a smaller image without build tools
-# FROM openjdk:17-jdk
-
-# Set working directory
 WORKDIR /app
 
-# Copy the built JAR file from the build stage
+# Copy the JAR file from the build stage
 COPY --from=build /app/build/libs/doaduo-0.0.1-SNAPSHOT.jar /app/build/libs/doaduo-0.0.1-SNAPSHOT.jar
 
-# Set the entrypoint for the container
+# Set the entry point to run the JAR file
 ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -jar /app/build/libs/doaduo-0.0.1-SNAPSHOT.jar"]
