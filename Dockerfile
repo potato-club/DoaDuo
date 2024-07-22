@@ -1,4 +1,4 @@
-# Base image with JDK
+# Build stage
 FROM openjdk:17-jdk AS build
 
 # Set working directory
@@ -9,6 +9,9 @@ COPY . /app
 
 # Ensure gradlew is executable
 RUN chmod +x ./gradlew
+
+# Install xargs only
+RUN yum install -y xargs && yum clean all
 
 # Build the application
 RUN ./gradlew bootJar
