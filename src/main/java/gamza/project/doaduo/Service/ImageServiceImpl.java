@@ -55,6 +55,7 @@ public class ImageServiceImpl implements ImageService {
         .build();
 
     imageRepository.save(imageEntity);
+    System.out.println("저장 완료");
   }
 
   @Override
