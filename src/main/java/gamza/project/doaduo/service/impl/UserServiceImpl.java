@@ -1,6 +1,5 @@
-package gamza.project.doaduo.Service.impl;
+package gamza.project.doaduo.service.impl;
 
-import gamza.project.doaduo.Service.inter.UserService;
 import gamza.project.doaduo.dto.RequestUserLoginDto;
 import gamza.project.doaduo.dto.RequestUserSignUpDto;
 import gamza.project.doaduo.entity.UserEntity;
@@ -10,6 +9,7 @@ import gamza.project.doaduo.error.requestError.NotFoundException;
 import gamza.project.doaduo.error.requestError.UnAuthorizedException;
 import gamza.project.doaduo.jwt.JwtTokenProvider;
 import gamza.project.doaduo.repository.UserRepository;
+import gamza.project.doaduo.service.inter.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +17,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -39,19 +44,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void login(RequestUserLoginDto dto, HttpServletResponse response) {
+    public Map<String, String> login(RequestUserLoginDto dto, HttpServletResponse response) {
 
-        if(!userRepository.existsByEmail(dto.getEmail())) {
+        if (!userRepository.existsByEmail(dto.getEmail())) {
             throw new UnAuthorizedException("L401-1", ErrorCode.UNAUTHORIZED_EXCEPTION);
         }
 
         UserEntity user = userRepository.findByEmail(dto.getEmail()).orElseThrow();
 
-        if(!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new UnAuthorizedException("L401-2", ErrorCode.UNAUTHORIZED_EXCEPTION);
         }
 
-        setTokenInHeader(dto.getEmail(), response);
+        String at = setBodyAtToken(dto.getEmail(), response);
+        String rt = setBodyRtToken(dto.getEmail(), response);
+
+        // Create a map with tokens
+        Map<String, String> tokens = new HashMap<>();
+        tokens.put("at", "Bearer " + at);
+        tokens.put("rt", "Bearer " + rt);
+
+        return tokens;
     }
 
     @Override
@@ -63,19 +76,40 @@ public class UserServiceImpl implements UserService {
         jwtTokenProvider.setHeaderAccessToken(response, newAT);
     }
 
+//    @Override
+//    public void setTokenInHeader(String  email, HttpServletResponse response) {
+//        UserEntity user = userRepository.findByEmail(email)
+//                .orElseThrow(() -> new NotFoundException("5003", ErrorCode.NOT_ALLOW_ACCESS_EXCEPTION));
+//
+//        UserRole role = user.getUserRole();
+//
+//        String accessToken = jwtTokenProvider.createAccessToken(user.getId(), role);
+//        String refreshToken = jwtTokenProvider.createRefreshToken(user.getId(), role);
+//
+//        jwtTokenProvider.setHeaderAccessToken(response, accessToken);
+//        jwtTokenProvider.setHeaderRefreshToken(response, refreshToken);
+//    }
+
     @Override
-    public void setTokenInHeader(String  email, HttpServletResponse response) {
+    public String setBodyAtToken(String  email, HttpServletResponse response) {
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("5003", ErrorCode.NOT_ALLOW_ACCESS_EXCEPTION));
 
         UserRole role = user.getUserRole();
 
-        String accessToken = jwtTokenProvider.createAccessToken(user.getId(), role);
-        String refreshToken = jwtTokenProvider.createRefreshToken(user.getId(), role);
-
-        jwtTokenProvider.setHeaderAccessToken(response, accessToken);
-        jwtTokenProvider.setHeaderRefreshToken(response, refreshToken);
+        return jwtTokenProvider.createAccessToken(user.getId(), role);
     }
+
+    @Override
+    public String setBodyRtToken(String  email, HttpServletResponse response) {
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("5003", ErrorCode.NOT_ALLOW_ACCESS_EXCEPTION));
+
+        UserRole role = user.getUserRole();
+
+        return jwtTokenProvider.createRefreshToken(user.getId(), role);
+    }
+
 
 
 }
