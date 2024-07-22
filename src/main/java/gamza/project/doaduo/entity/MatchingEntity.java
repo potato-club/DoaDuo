@@ -17,10 +17,8 @@ public class MatchingEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String requesterName;
 
-    @Column(nullable = false)
     private String respondentName;
 
     @Column(nullable = false)
@@ -28,6 +26,13 @@ public class MatchingEntity {
 
     @Column(nullable = false)
     private String quickMessage;
+
+    @Column(nullable = false)
+    private double latitude;
+
+    @Column(nullable = false)
+    private double longitude;
+
 
     private boolean requestState; // 요청자 상태
 
@@ -37,4 +42,6 @@ public class MatchingEntity {
 
     private boolean rejectState; // 거절 상태 기본 false
 
+    public void setAcceptState(boolean b) {
+    }
 }
