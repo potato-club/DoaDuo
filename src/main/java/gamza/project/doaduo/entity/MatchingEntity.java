@@ -8,35 +8,33 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Entity
 @Builder
-public class UserEntity {
+@Entity
+@Getter
+public class MatchingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+    @Column(nullable = false)
+    private String requesterName;
 
     @Column(nullable = false)
-    private String password;
+    private String respondentName;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private UserRole userRole;
+    private String currentAddress;
 
     @Column(nullable = false)
-    private String phoneNumber;
+    private String quickMessage;
 
-    @Column(nullable = false)
-    private boolean gender; // true = maie
+    private boolean requestState; // 요청자 상태
 
-    @Column(nullable = false)
-    private String address;
+    private boolean responseState; // 응답자 상태
 
-    private String memo;
+    private boolean acceptState; // 수락상태 기본 false
 
+    private boolean rejectState; // 거절 상태 기본 false
 
 }
