@@ -1,5 +1,6 @@
-package gamza.project.doaduo.service.impl;
+package gamza.project.doaduo.Service.impl;
 
+import gamza.project.doaduo.Service.inter.UserService;
 import gamza.project.doaduo.dto.RequestUserLoginDto;
 import gamza.project.doaduo.dto.RequestUserSignUpDto;
 import gamza.project.doaduo.entity.UserEntity;
@@ -9,7 +10,6 @@ import gamza.project.doaduo.error.requestError.NotFoundException;
 import gamza.project.doaduo.error.requestError.UnAuthorizedException;
 import gamza.project.doaduo.jwt.JwtTokenProvider;
 import gamza.project.doaduo.repository.UserRepository;
-import gamza.project.doaduo.service.inter.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

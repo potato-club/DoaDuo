@@ -1,12 +1,11 @@
-package gamza.project.doaduo.Service;
+package gamza.project.doaduo.Service.impl;
 
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import gamza.project.doaduo.Repository.ImageRepository;
-import gamza.project.doaduo.dto.Image;
+import gamza.project.doaduo.Service.inter.ImageService;
 import gamza.project.doaduo.dto.ImageRequest;
 import gamza.project.doaduo.dto.ImageUpdate;
 import gamza.project.doaduo.entity.ImageEntity;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service

@@ -1,12 +1,9 @@
 package gamza.project.doaduo.Controller;
 
-import gamza.project.doaduo.Repository.ImageRepository;
-import gamza.project.doaduo.Service.ImageServiceImpl;
+import gamza.project.doaduo.Service.impl.ImageServiceImpl;
 import gamza.project.doaduo.dto.ImageRequest;
-import gamza.project.doaduo.dto.ImageResponse;
 import gamza.project.doaduo.dto.ImageUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

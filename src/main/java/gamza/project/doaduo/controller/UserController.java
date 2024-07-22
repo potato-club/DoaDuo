@@ -1,8 +1,8 @@
 package gamza.project.doaduo.Controller;
 
+import gamza.project.doaduo.Service.inter.UserService;
 import gamza.project.doaduo.dto.RequestUserLoginDto;
 import gamza.project.doaduo.dto.RequestUserSignUpDto;
-import gamza.project.doaduo.service.inter.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

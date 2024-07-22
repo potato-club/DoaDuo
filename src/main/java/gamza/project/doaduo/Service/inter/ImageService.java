@@ -1,4 +1,4 @@
-package gamza.project.doaduo.Service;
+package gamza.project.doaduo.Service.inter;
 
 import gamza.project.doaduo.dto.ImageRequest;
 import gamza.project.doaduo.dto.ImageUpdate;
