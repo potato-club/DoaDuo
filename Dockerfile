@@ -8,7 +8,7 @@
 #
 #ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -jar /app/build/libs/doaduo-0.0.1-SNAPSHOT.jar"]
 #
-FROM openjdk:17-jdk AS build
+FROM openjdk:17-jdk
 
 # Set working directory
 WORKDIR /app
@@ -17,13 +17,13 @@ WORKDIR /app
 COPY . /app
 
 # Ensure gradlew is executable
-RUN chmod +x ./gradlew
+#RUN chmod +x ./gradlew
 
 # Install findutils and build the application
-RUN microdnf install -y findutils && microdnf clean all && ./gradlew bootJar
+#RUN microdnf install -y findutils && microdnf clean all && ./gradlew bootJar
 
 # Second stage: create a smaller image without build tools
-FROM openjdk:17-jdk
+# FROM openjdk:17-jdk
 
 # Set working directory
 WORKDIR /app
