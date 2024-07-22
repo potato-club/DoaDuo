@@ -2,7 +2,6 @@ package gamza.project.doaduo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.joda.time.DateTime;
 
 import java.time.LocalDateTime;
 
@@ -38,7 +37,7 @@ public class MatchingEntity {
     @Column(nullable = false)
     private double longitude;
 
-    private DateTime createdAt;
+    private LocalDateTime createdAt;
 
     private boolean requestState; // 요청자 상태
 

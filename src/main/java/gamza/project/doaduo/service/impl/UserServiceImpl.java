@@ -56,13 +56,18 @@ public class UserServiceImpl implements UserService {
             throw new UnAuthorizedException("L401-2", ErrorCode.UNAUTHORIZED_EXCEPTION);
         }
 
+
         String at = setBodyAtToken(dto.getEmail(), response);
         String rt = setBodyRtToken(dto.getEmail(), response);
 
+        String userRole = jwtTokenProvider.extractRole(at);
+
+        // 0 = RESPONDENT
         // Create a map with tokens
         Map<String, String> tokens = new HashMap<>();
         tokens.put("at", "Bearer " + at);
         tokens.put("rt", "Bearer " + rt);
+        tokens.put("role", "ROLE_" + userRole);
 
         return tokens;
     }
