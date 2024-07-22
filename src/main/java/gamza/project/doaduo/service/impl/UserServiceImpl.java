@@ -8,7 +8,7 @@ import gamza.project.doaduo.error.ErrorCode;
 import gamza.project.doaduo.error.requestError.NotFoundException;
 import gamza.project.doaduo.error.requestError.UnAuthorizedException;
 import gamza.project.doaduo.jwt.JwtTokenProvider;
-import gamza.project.doaduo.jwt.UserRepository;
+import gamza.project.doaduo.repository.UserRepository;
 import gamza.project.doaduo.service.inter.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
