@@ -24,16 +24,16 @@ public class UserEntity {
     private String password;
 
     @Column(nullable = false)
+    private String username;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-    @Column(nullable = false)
     private String phoneNumber;
 
-    @Column(nullable = false)
     private boolean gender; // true = maie
 
-    @Column(nullable = false)
     private String address;
 
     private String memo;

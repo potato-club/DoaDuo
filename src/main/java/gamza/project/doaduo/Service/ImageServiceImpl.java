@@ -63,9 +63,9 @@ public class ImageServiceImpl implements ImageService {
     if (image.isEmpty()) {
       throw new RuntimeException("변경할 이미지가 없습니다.");
     }
-    Image imagedto  = imageRepository.findByUserEmail(update.getUserEmail());
+    ImageEntity imageEntity  = imageRepository.findByUserEmail(update.getUserEmail());
 
-    if (imagedto==null) {
+    if (imageEntity==null) {
       throw new RuntimeException("해당 사용자 이메일로 등록된 프로필 이미지가 없습니다.");
     }
 
@@ -82,28 +82,28 @@ public class ImageServiceImpl implements ImageService {
 
     // 기존 이미지 엔티티를 업데이트합니다.
     ImageEntity updatedImageEntity = ImageEntity.builder()
-        .id(imagedto.getId())
+        .id(imageEntity.getId())
         .originalFileName(key)
         .fileName(fileName)
         .fileUrl(amazonS3Client.getUrl(bucketName, fileName).toString())
-        .userEmail(imagedto.getUserEmail())
+        .userEmail(imageEntity.getUserEmail())
         .build();
     imageRepository.save(updatedImageEntity);
   }
 
   @Override
   public void deleteFile(ImageRequest request) throws IOException {
-    Image imagedto = imageRepository.findByUserEmail(request.getUser_email());
+    ImageEntity imageEntity = imageRepository.findByUserEmail(request.getUser_email());
 
-    if (imagedto==null) {
+    if (imageEntity==null) {
       throw new RuntimeException("해당 사용자 이메일로 등록된 프로필 이미지가 없습니다.");
     }
     // S3에서 파일을 삭제합니다.
-    amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, imagedto.getFileName()));
+    amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, imageEntity.getFileName()));
 
 
     // 데이터베이스에서 이미지 엔티티를 삭제합니다.
-    imageRepository.delete(ImageEntity.from(imagedto));
+    imageRepository.delete(imageEntity);
   }
 
   @Override

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ImageRepository extends JpaRepository<ImageEntity, Long> {
 
-  Image findByUserEmail(String userEmail);
+  ImageEntity findByUserEmail(String userEmail);
 
 }
 
