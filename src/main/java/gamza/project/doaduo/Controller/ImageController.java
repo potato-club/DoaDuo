@@ -1,8 +1,8 @@
 package gamza.project.doaduo.Controller;
 
-import gamza.project.doaduo.Service.impl.ImageServiceImpl;
+import gamza.project.doaduo.Service.inter.ImageService;
 import gamza.project.doaduo.dto.ImageRequest;
-import gamza.project.doaduo.dto.ImageUpdate;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,29 +15,29 @@ import java.io.IOException;
 public class ImageController {
 
 
-  private final ImageServiceImpl imageServiceImpl;
+  private final ImageService imageService;
 
   @Autowired
-  public ImageController(ImageServiceImpl imageServiceImpl) {
-    this.imageServiceImpl = imageServiceImpl;
+  public ImageController(ImageService imageService) {
+    this.imageService = imageService;
   }
 
   @PostMapping("/upload")
-  public ResponseEntity<String> uploadProfilePhoto(@RequestPart("file") MultipartFile file, ImageRequest request) throws IOException {
-    imageServiceImpl.uploadFile(file, request);
+  public ResponseEntity<String> uploadProfilePhoto(@RequestPart("file") MultipartFile file, HttpServletRequest request) throws IOException {
+    imageService.uploadFile(file, request.getHeader("AT"));
     return ResponseEntity.ok("이미지가 성공적으로 업로드되었습니다.");
   }
 
   @PutMapping("/update")
-  public ResponseEntity<String> updateImage(@RequestParam("file") MultipartFile file, ImageUpdate update) throws IOException {
-    imageServiceImpl.updateFile(file, update);
+  public ResponseEntity<String> updateImage(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException {
+    imageService.updateFile(file, request.getHeader("AT"));
     return ResponseEntity.ok("이미지가 성공적으로 업데이트되었습니다.");
   }
 
   @DeleteMapping("/delete")
-  public ResponseEntity<String> deleteProfilePhoto(ImageRequest request) throws IOException {
-    imageServiceImpl.deleteFile(request);
-    return ResponseEntity.ok("이미지가 성공적으로 업데이트되었습니다.");
+  public ResponseEntity<String> deleteProfilePhoto(HttpServletRequest request) throws IOException {
+    imageService.deleteFile(request.getHeader("AT"));
+    return ResponseEntity.ok("이미지가 성공적으로 삭제되었습니다.");
   }
 
 //  @GetMapping(value = "/view")

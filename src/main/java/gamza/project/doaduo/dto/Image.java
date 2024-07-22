@@ -15,15 +15,15 @@ public class Image {
 
   private final String fileUrl;
 
-  private final String userEmail;
+  private final Long userid;
 
 
-  public Image(Long id, String originalFileName, String fileName, String fileUrl, String email) {
+  public Image(Long id, String originalFileName, String fileName, String fileUrl, Long userid) {
     this.id = id;
     this.originalFileName = originalFileName;
     this.fileName = fileName;
     this.fileUrl = fileUrl;
-    this.userEmail = email;
+    this.userid = userid;
   }
 
 }

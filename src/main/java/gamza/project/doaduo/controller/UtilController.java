@@ -1,4 +1,4 @@
-package gamza.project.doaduo.controller;
+package gamza.project.doaduo.Controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;

@@ -28,7 +28,7 @@ public class ImageEntity {
   private String fileUrl;
 
   @Column
-  private String userEmail;
+  private Long userid;
 
   public static ImageEntity from(Image image) {
     ImageEntity imageEntity = new ImageEntity();
@@ -36,7 +36,7 @@ public class ImageEntity {
     imageEntity.originalFileName = image.getOriginalFileName();
     imageEntity.fileName = image.getFileName();
     imageEntity.fileUrl = image.getFileUrl();
-    imageEntity.userEmail = image.getUserEmail();
+    imageEntity.userid = image.getUserid();
 
     return imageEntity;
   }
@@ -47,7 +47,7 @@ public class ImageEntity {
         .originalFileName(originalFileName)
         .fileName(fileName)
         .fileUrl(fileUrl)
-        .userEmail(userEmail)
+        .userid(userid)
         .build();
   }
 

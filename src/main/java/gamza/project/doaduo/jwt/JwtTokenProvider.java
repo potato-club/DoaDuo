@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import gamza.project.doaduo.entity.UserEntity;
 import gamza.project.doaduo.entity.UserRole;
-import gamza.project.doaduo.repository.UserRepository;
+import gamza.project.doaduo.Repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -24,6 +24,7 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Optional;
@@ -92,6 +93,15 @@ public class JwtTokenProvider {
     public void setHeaderRefreshToken(HttpServletResponse response, String refreshToken) {
         response.setHeader("RT", refreshToken);
     }
+    public void setBodyToken(HttpServletResponse response, String accessToken, String refreshToken) throws IOException {
+        response.setContentType("application/json"); // 응답 타입을 JSON으로 설정
+        response.setCharacterEncoding("UTF-8"); // 인코딩 설정
+
+        // JSON 형식으로 응답 바디 작성
+        String jsonResponse = String.format("{\"accessToken\": \"%s\", \"refreshToken\":\"%s\" }", accessToken, refreshToken);
+        response.getWriter().write(jsonResponse);
+    }
+
 
     public UsernamePasswordAuthenticationToken getAuthentication(String token) {
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(this.extractUserEmail(token));

@@ -1,4 +1,4 @@
-package gamza.project.doaduo.repository;
+package gamza.project.doaduo.Repository;
 
 import gamza.project.doaduo.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

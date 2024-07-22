@@ -1,8 +1,8 @@
-package gamza.project.doaduo.service.impl;
+package gamza.project.doaduo.Service.impl;
 
 import gamza.project.doaduo.dto.MatchingRequestDTO;
 import gamza.project.doaduo.entity.MatchingEntity;
-import gamza.project.doaduo.repository.MatchingRepository;
+import gamza.project.doaduo.Repository.MatchingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
