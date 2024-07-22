@@ -1,4 +1,4 @@
-# Build stage
+# Base image with JDK
 FROM openjdk:17-jdk AS build
 
 # Set working directory
@@ -10,11 +10,8 @@ COPY . /app
 # Ensure gradlew is executable
 RUN chmod +x ./gradlew
 
-# Install xargs only
-RUN yum install -y xargs && yum clean all
-
-# Build the application
-RUN ./gradlew bootJar
+# Install findutils and build the application
+RUN microdnf install -y findutils && microdnf clean all && ./gradlew bootJar
 
 # Second stage: create a smaller image without build tools
 FROM openjdk:17-jdk
