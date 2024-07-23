@@ -1,26 +1,28 @@
 package gamza.project.doaduo.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.joda.time.DateTime;
+
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
 @Getter
+@Setter
 public class MatchingEntity {
+
+    public static final int STATUS_PENDING = 0;
+    public static final int STATUS_ACCEPTED = 1;
+    public static final int STATUS_EXPIRED = 2;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String requesterName;
 
-    @Column(nullable = false)
     private String respondentName;
 
     @Column(nullable = false)
@@ -28,6 +30,14 @@ public class MatchingEntity {
 
     @Column(nullable = false)
     private String quickMessage;
+
+    @Column(nullable = false)
+    private double latitude;
+
+    @Column(nullable = false)
+    private double longitude;
+
+    private DateTime createdAt;
 
     private boolean requestState; // 요청자 상태
 

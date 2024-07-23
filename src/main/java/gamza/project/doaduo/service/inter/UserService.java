@@ -7,15 +7,16 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Map;
 
 public interface UserService {
 
     void signUp(RequestUserSignUpDto dto, HttpServletResponse response, MultipartFile file) throws IOException;
 
-    void login(RequestUserLoginDto dto, HttpServletResponse response) throws IOException ;
+    //void login(RequestUserLoginDto dto, HttpServletResponse response) throws IOException ;
 
+    Map<String, String> login(RequestUserLoginDto dto, HttpServletResponse response);
     void reissueToken(HttpServletRequest request, HttpServletResponse response);
-
-    void setTokenInHeader(String email, HttpServletResponse response);
-    void setBodyInHeader(String  email, HttpServletResponse response) throws IOException;
+    String setBodyAtToken(String  email, HttpServletResponse response);
+    String setBodyRtToken(String  email, HttpServletResponse response);
 }

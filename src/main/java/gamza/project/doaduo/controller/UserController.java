@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,14 +27,20 @@ public class UserController {
         return ResponseEntity.ok().body("Success Sing Up!\nIf you want to see the PK value, please ask SH :)");
     }
 
+//    @PostMapping("/login")
+//    public ResponseEntity<String> login(@RequestBody RequestUserLoginDto dto, HttpServletResponse response) {
+//        try {
+//            userService.login(dto, response);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return ResponseEntity.ok().body("Success Login!");
+//    }
+
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody RequestUserLoginDto dto, HttpServletResponse response) {
-        try {
-            userService.login(dto, response);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return ResponseEntity.ok().body("Success Login!");
+    public ResponseEntity<Map<String, String>> login(@RequestBody RequestUserLoginDto dto, HttpServletResponse response) {
+        Map<String, String> tokens = userService.login(dto, response);
+        return ResponseEntity.ok(tokens);
     }
 
     @GetMapping("/reissue")
